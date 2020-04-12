@@ -1,6 +1,25 @@
 import numpy as np
 
 
+# Convert decimal integer to extended 64-bit binary string
+def decimal_to_binary(n):
+    binary = bin(n).replace("0b", "")
+    while len(binary) < 64:
+        binary = '0' + binary
+    return binary
+
+
+# Convert hex string to binary string
+def hex_to_binary_string(n):
+    return bin(int(n, 16)).replace("0b", "")
+
+
+# Convert decimal string to binary string
+def decimal_to_binary_string(n):
+    return bin(int(n)).replace("0b", "")
+
+
+# Calculate the nth parity bit given the data
 def calculate_parity_value(data, parity_number):
     count = 0
     for i in range(1, data.size+1):
@@ -9,21 +28,6 @@ def calculate_parity_value(data, parity_number):
             count += 1
 
     return 0 if count % 2 == 0 else 1
-
-
-def decimal_to_binary(n):
-    binary = bin(n).replace("0b", "")
-    while len(binary) < 64:
-        binary = '0' + binary
-    return binary
-
-
-def hex_to_binary_string(n):
-    return bin(int(n, 16)).replace("0b", "")
-
-
-def decimal_to_binary_string(n):
-    return bin(int(n)).replace("0b", "")
 
 
 def encoder(data_string, data_type, secded, input_size):
@@ -57,7 +61,6 @@ def encoder(data_string, data_type, secded, input_size):
             data_string = '0' + data_string
 
     # Calculate number of parity bits (not considering secded yet)
-    print(data_string)
     data = np.array(list(data_string))
     num_parity_bits = 0
     while 2**num_parity_bits < len(data) + num_parity_bits + 1:
@@ -83,9 +86,13 @@ def encoder(data_string, data_type, secded, input_size):
     secded_bit = 0 if int(np.sum(out_w_parity)) % 2 == 0 else 1
     if secded:
         out_w_parity = np.append(out_w_parity[0], secded_bit)
-    return np.array2string(out_w_parity)
+    message_out = ''
+    for i in range(out_w_parity.size):
+        message_out = message_out + str(int(out_w_parity[0, i]))
+    return message_out
 
 
-print(encoder('0110', 'binary', False, 4))
-print(encoder('6', 'decimal', False, 4))
-print(encoder('6', 'hex', False, 4))
+# Testing
+# print(encoder('0110', 'binary', False, 4))
+# print(encoder('6', 'decimal', False, 4))
+# print(encoder('6', 'hex', False, 4))
