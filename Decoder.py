@@ -50,6 +50,6 @@ def decoder(data_string, data_type, secded, message_size):
             bitNumber = str(calculate_parity_value(test, i + 1)) + bitNumber
         return "Error at " + str(int(bitNumber, 2))
 
-    return "No errors: message is " + calculated_parity
+    return "No errors: message is " + message
 
-print(decoder('0010110', 'binary', False, 4))
+print(decoder('0100110', 'binary', False, 4))

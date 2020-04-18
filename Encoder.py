@@ -22,11 +22,15 @@ def decimal_to_binary_string(n):
 # Calculate the nth parity bit given the data
 def calculate_parity_value(data, parity_number):
     count = 0
+    print("For parity bit " + str(parity_number) + ": examine ", end=' ')
     for i in range(1, data.size+1):
         binary = decimal_to_binary(i)
+        if int(binary[len(binary) - parity_number]) == 1:
+            print(str(i), end=', ')
         if int(binary[len(binary) - parity_number]) == 1 and data[0, i - 1] == 0:
             count += 1
 
+    print("")
     return 0 if count % 2 == 0 else 1
 
 
@@ -84,15 +88,15 @@ def encoder(data_string, data_type, secded, input_size):
         out_w_parity[0, parity_positions[i]] = calculate_parity_value(out_w_parity, i + 1)
 
     secded_bit = 0 if int(np.sum(out_w_parity)) % 2 == 0 else 1
-    if secded:
-        out_w_parity = np.append(out_w_parity[0], secded_bit)
     message_out = ''
     for i in range(out_w_parity.size):
         message_out = message_out + str(int(out_w_parity[0, i]))
+    if secded:
+        message_out = message_out + str(secded_bit)
     return message_out
 
 
 # Testing
-# print(encoder('0110', 'binary', False, 4))
+# print(encoder('0110', 'binary', False, 6))
 # print(encoder('6', 'decimal', False, 4))
 # print(encoder('6', 'hex', False, 4))
