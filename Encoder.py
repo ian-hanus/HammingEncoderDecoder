@@ -108,7 +108,7 @@ def encoder(data_string, data_type, secded, input_size):
     for i in parity_calculations:
         output_steps.append(i)
     if secded:
-        output_steps.append("Secded bit determined by sum of message mod 2 = " + int(secded_bit))
+        output_steps.append("Secded bit determined by sum of message mod 2 = " + str(int(secded_bit)))
     return message_out, output_steps
 
 

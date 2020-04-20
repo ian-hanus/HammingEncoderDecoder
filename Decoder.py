@@ -17,6 +17,7 @@ def decimal_to_binary(n):
         binary = '0' + binary
     return binary
 
+
 # Convert hex string to binary string
 def hex_to_binary_string(n):
     return bin(int(n, 16)).replace("0b", "")
@@ -25,6 +26,14 @@ def hex_to_binary_string(n):
 # Convert decimal string to binary string
 def decimal_to_binary_string(n):
     return bin(int(n)).replace("0b", "")
+
+
+def num_errors(a, b):
+    count = 0
+    for i in range(len(a)):
+        if a[i] != b[i]:
+            count += 1
+    return count
 
 
 def decoder(data_string, data_type, secded, message_size):
@@ -52,7 +61,7 @@ def decoder(data_string, data_type, secded, message_size):
     # Split secded for check later
     if secded:
         secded_bit = data_string[len(data_string) - 1]
-        data_string = data_string[0:len(data_string)-2]
+        data_string = data_string[0:len(data_string)-1]
 
     # Check if message size is valid
     num_parity_bits = len(data_string) - message_size
@@ -71,16 +80,18 @@ def decoder(data_string, data_type, secded, message_size):
             message += data_string[i]
 
     # Calculate parity bits
-    calculated_parity, messages = encoder(message, 'binary', False, message_size)
+    calculated_parity, messages = encoder(message, 'binary', secded, message_size)
     test = np.array(list(data_string))
-    print(calculated_parity)
-    print(data_string)
+    if secded:
+        data_string = data_string + secded_bit
     if(calculated_parity != data_string):
         bitNumber = ''
         for i in range(num_parity_bits):
             bitNumber = str(calculate_parity_value(test, i + 1)) + bitNumber
-        if(secded):
+        if(secded) and num_errors(calculated_parity, data_string) > 1:
             return "Error detected in secded mode"
+        if str(int(bitNumber, 2)) == '0' and calculated_parity[0] == data_string[0] and secded:
+            return "Error in extra parity bit for secded"
         return "Error at " + str(int(bitNumber, 2))
 
-    return "No errors, message is " + message
+    return "Message is " + message

@@ -42,7 +42,7 @@ def reset():
 
 win = tk.Tk()
 win.title("Hamming Encoder/Decoder")
-win.geometry("490x480")
+win.geometry("490x500")
 win.resizable(width=False, height=False)
 
 
@@ -103,7 +103,7 @@ texLabel.grid(row=7, column=0, sticky="W")
 tex.grid(row=7, column=0, columnspan=3, sticky="E")
 scroll_tex.grid(row=8, column=1)
 encode_output.grid(row=5, column=0, sticky="E", columnspan=3)
-# scroll.grid(row=6, column=0, sticky="N")
+scroll.grid(row=6, column=1, sticky="N")
 encode_output_label.grid(row=5, column=0, sticky="W")
 encode_secsed_radio.grid(row=2, column=1, sticky="W")
 encode_secded_radio.grid(row=3, column=1, sticky="W")
@@ -150,7 +150,7 @@ decode_decimal_radio.grid(row=11, column=0, sticky="W")
 decode_hex_radio.grid(row=12, column=0, sticky="W")
 
 decoder_output.grid(row=13, column=0, sticky="E", columnspan=3)
-# scroll_decoder.grid(row=14, column=0, sticky="N")
+scroll_decoder.grid(row=14, column=1, sticky="N")
 decoder_output_label.grid(row=13, column=0, sticky="W")
 decode_secsed_radio.grid(row=10, column=1, sticky="W")
 decode_secded_radio.grid(row=11, column=1, sticky="W")
