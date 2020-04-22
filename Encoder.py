@@ -22,19 +22,18 @@ def decimal_to_binary_string(n):
 # Calculate the nth parity bit given the data
 def calculate_parity_value(data, parity_number, parity_string):
     count = 0
-    # print("For parity bit " + str(parity_number) + ": examine ", end=' ')
     for i in range(1, data.size+1):
         binary = decimal_to_binary(i)
         if int(binary[len(binary) - parity_number]) == 1:
-            # print(str(i), end=', ')
             parity_string += str(i) + ', '
         if int(binary[len(binary) - parity_number]) == 1 and data[0, i - 1] == 0:
             count += 1
 
-    # print("")
     return 0 if count % 2 == 0 else 1, parity_string
 
-
+ # print("")
+    # print(str(i), end=', ')
+    # print("For parity bit " + str(parity_number) + ": examine ", end=' ')
 def encoder(data_string, data_type, secded, input_size):
     # Check for input errors and convert to binary
     valid_binary = ['0', '1']

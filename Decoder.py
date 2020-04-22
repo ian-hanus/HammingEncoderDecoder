@@ -11,6 +11,19 @@ def calculate_parity_value(data, parity_number):
     return 0 if count % 2 == 0 else 1
 
 
+def parity_bit_fails(data_string):
+    secded_bit = int(data_string[len(data_string) - 1])
+    data_string = data_string[:len(data_string)-1]
+    data_list = list(data_string)
+    number_list = []
+    for i in data_list:
+        number_list.append(int(i))
+    number_array = np.asarray(number_list)
+    if int(np.sum(number_array)) % 2 == secded_bit:
+        return False
+    return True
+
+
 def decimal_to_binary(n):
     binary = bin(n).replace("0b", "")
     while len(binary) < 64:
@@ -84,14 +97,30 @@ def decoder(data_string, data_type, secded, message_size):
     test = np.array(list(data_string))
     if secded:
         data_string = data_string + secded_bit
-    if(calculated_parity != data_string):
+    if calculated_parity != data_string:
         bitNumber = ''
         for i in range(num_parity_bits):
             bitNumber = str(calculate_parity_value(test, i + 1)) + bitNumber
-        if(secded) and num_errors(calculated_parity, data_string) > 1:
-            return "Error detected in secded mode"
-        if str(int(bitNumber, 2)) == '0' and calculated_parity[0] == data_string[0] and secded:
-            return "Error in extra parity bit for secded"
-        return "Error at " + str(int(bitNumber, 2))
+
+        if (parity_bit_fails(data_string)) and secded and num_errors(calculated_parity[:len(calculated_parity)-1], data_string[:len(data_string)-1]) >= 1:
+            print("Single bit corruption")
+
+        if num_errors(calculated_parity[:len(calculated_parity)-1], data_string[:len(data_string)-1]) >= 1 and secded and (not parity_bit_fails(data_string)):
+            return "Double error secded"
+
+        if parity_bit_fails(data_string) and num_errors(calculated_parity[:len(calculated_parity)-1], data_string[:len(data_string)-1]) == 0:
+            return "Parity bit failed, message is " + message
+
+        if secded:
+            data_string = data_string[0:len(data_string)-1]
+        correct_list = list(data_string)
+        correct_list[int(bitNumber, 2)-1] = '0' if correct_list[int(bitNumber, 2)-1] == '1' else '1'
+        corrected_string = ''.join(correct_list)
+        corrected_message = ''
+        for i in range(len(corrected_string)):
+            if not i in parity_positions:
+                corrected_message += corrected_string[i]
+
+        return "Error at " + str(int(bitNumber, 2)) + ", message is " + corrected_message
 
     return "Message is " + message

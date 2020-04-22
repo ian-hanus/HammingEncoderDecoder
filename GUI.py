@@ -27,12 +27,14 @@ def step():
         if counter <= count_step:
             encode_explanation = encode_explanation + i
         counter += 1
+    output_text.set(output)
     tex.delete('1.0', tk.END)
     tex.insert(tk.END, encode_explanation)
     tex.see(tk.END)
     count_step_var.set(count_step + 1)
 
 def reset():
+    output_text.set("")
     tex.delete('1.0', tk.END)
     count_step_var.set(0)
 
@@ -51,7 +53,7 @@ encode_data = tk.Entry(width=60)
 encode_button = tk.Button(win, text="Encode", command=encode)
 
 encode_bits = []
-for i in range(1, 33):
+for i in range(1, 65):
     encode_bits.append(i)
 encode_bits_option = tk.StringVar(win)
 encode_bits_option.set(encode_bits[0])
@@ -114,7 +116,7 @@ decode_data = tk.Entry(width=60)
 decode_button = tk.Button(win, text="Decode", command=decode)
 
 decode_bits = []
-for i in range(1, 33):
+for i in range(1, 65):
     decode_bits.append(i)
 decode_bits_option = tk.StringVar(win)
 decode_bits_option.set(decode_bits[0])
